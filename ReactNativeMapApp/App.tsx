@@ -1,53 +1,37 @@
 /**
- * React Native Google Maps App
+ * React Native Google Maps App with Navigation
  * https://github.com/facebook/react-native
  *
  * @format
  */
 
 import React from 'react';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { useColorScheme } from 'react-native';
+import { NavigationContainer, DarkTheme, DefaultTheme } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { HomeScreen, AboutScreen, RootStackParamList } from './src/screens';
 
-// Seoul, South Korea coordinates
-const SEOUL_REGION = {
-  latitude: 37.5665,
-  longitude: 126.978,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={SEOUL_REGION}
-      >
-        <Marker
-          coordinate={{
-            latitude: SEOUL_REGION.latitude,
-            longitude: SEOUL_REGION.longitude,
-          }}
-          title="Seoul"
-          description="Capital of South Korea"
+    <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Home' }}
         />
-      </MapView>
-    </View>
+        <Stack.Screen
+          name="About"
+          component={AboutScreen}
+          options={{ title: 'About' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-});
 
 export default App;
