@@ -3,5 +3,6 @@
  * This file re-exports all screen components for convenient importing
  */
 
-export { default as HomeScreen, RootStackParamList } from './HomeScreen';
+export { default as HomeScreen } from './HomeScreen';
+export type { RootStackParamList } from './HomeScreen';
 export { default as AboutScreen } from './AboutScreen';
