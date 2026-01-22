@@ -23,7 +23,7 @@ const APP_INFO = {
   description: 'A React Native application featuring Google Maps integration with navigation support.',
 };
 
-function AboutScreen({ navigation }: Props) {
+function AboutScreen({ navigation: _navigation }: Props) {
   const isDarkMode = useColorScheme() === 'dark';
 
   const dynamicStyles = {

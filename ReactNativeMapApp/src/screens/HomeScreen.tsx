@@ -3,7 +3,7 @@
  * Displays a map centered on Seoul, South Korea
  */
 
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useCallback, useMemo } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -32,26 +32,42 @@ const SEOUL_REGION = {
   longitudeDelta: 0.0421,
 };
 
+// Header button component extracted to avoid unstable nested components
+function HeaderRightButton({ onPress, isDarkMode }: { onPress: () => void; isDarkMode: boolean }) {
+  return (
+    <TouchableOpacity
+      style={styles.headerButton}
+      onPress={onPress}
+      accessibilityLabel="Go to About page"
+      accessibilityRole="button"
+    >
+      <Text style={[styles.headerButtonText, isDarkMode && styles.headerButtonTextDark]}>
+        About
+      </Text>
+    </TouchableOpacity>
+  );
+}
+
 function HomeScreen({ navigation }: Props) {
   const isDarkMode = useColorScheme() === 'dark';
+
+  const handleAboutPress = useCallback(() => {
+    navigation.navigate('About');
+  }, [navigation]);
+
+  // Memoize header right render function - React Navigation requires a render function
+  const headerRight = useMemo(
+    // eslint-disable-next-line react/no-unstable-nested-components
+    () => () => <HeaderRightButton onPress={handleAboutPress} isDarkMode={isDarkMode} />,
+    [handleAboutPress, isDarkMode],
+  );
 
   // Configure header with About navigation button
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate('About')}
-          accessibilityLabel="Go to About page"
-          accessibilityRole="button"
-        >
-          <Text style={[styles.headerButtonText, isDarkMode && styles.headerButtonTextDark]}>
-            About
-          </Text>
-        </TouchableOpacity>
-      ),
+      headerRight,
     });
-  }, [navigation, isDarkMode]);
+  }, [navigation, headerRight]);
 
   return (
     <View style={styles.container}>
