@@ -3,8 +3,15 @@
  * Displays a map centered on Seoul, South Korea
  */
 
-import React from 'react';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import React, { useLayoutEffect } from 'react';
+import {
+  StatusBar,
+  StyleSheet,
+  useColorScheme,
+  View,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -27,6 +34,24 @@ const SEOUL_REGION = {
 
 function HomeScreen({ navigation }: Props) {
   const isDarkMode = useColorScheme() === 'dark';
+
+  // Configure header with About navigation button
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => navigation.navigate('About')}
+          accessibilityLabel="Go to About page"
+          accessibilityRole="button"
+        >
+          <Text style={[styles.headerButtonText, isDarkMode && styles.headerButtonTextDark]}>
+            About
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, isDarkMode]);
 
   return (
     <View style={styles.container}>
@@ -55,6 +80,19 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  headerButton: {
+    marginRight: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  headerButtonText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontWeight: '600',
+  },
+  headerButtonTextDark: {
+    color: '#0A84FF',
   },
 });
 
