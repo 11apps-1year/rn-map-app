@@ -8,10 +8,6 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
-# Add Google Maps pod configuration
-pod 'GoogleMaps'
-pod 'Google-Maps-iOS-Utils'
-
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
@@ -21,9 +17,9 @@ end
 target 'ReactNativeMapApp' do
   config = use_native_modules!
 
-  # Add Google Maps provider for react-native-maps
+  # Add react-native-maps with Google Maps subspec
   rn_maps_path = '../node_modules/react-native-maps'
-  pod 'react-native-google-maps', :path => rn_maps_path
+  pod 'react-native-maps', :path => rn_maps_path, :subspecs => ['Google']
 
   use_react_native!(
     :path => config[:reactNativePath],
