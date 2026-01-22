@@ -17,6 +17,10 @@ end
 target 'ReactNativeMapApp' do
   config = use_native_modules!
 
+  # Add react-native-maps with Google Maps subspec
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-maps', :path => rn_maps_path, :subspecs => ['Google']
+
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
